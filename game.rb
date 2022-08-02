@@ -26,9 +26,21 @@ class Player
       @choices.include?(position) ? @marker : position
     end
   end
+
+  def new_move(position)
+    if @board.positions.include?(position)
+      @choices.push(position)
+      positions_on_board
+    else
+      p 'This spot is already taken. Choose another one.'
+    end
+  end
 end
 
 board = Board.new
 player1 = Player.new('X', ['a1', 'b2', 'c3'], board)
-puts player1.positions_on_board
+player2 = Player.new('O', ['a2', 'b3', 'c1'], board)
+player1.positions_on_board
+player2.positions_on_board
+player1.new_move('b1')
 puts board.display_grid
