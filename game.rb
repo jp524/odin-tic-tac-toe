@@ -1,23 +1,27 @@
-class Game
-  attr_reader :player, :choices
+class Board
+  attr_reader :positions
 
-  def initialize(player, choices)
-    @player = player
-    @choices = choices
-  end
-
-  def display(position)
-    @choices.include?(position) ? 'X' : ' '
+  def initialize
+    @positions = [['a1', 'b1', 'c1'], ['a2', 'b2', 'c2'], ['a3', 'b3', 'c3']]
   end
 
   def display_grid
-    print "#{display('a1')} | #{display('a2')} | #{display('a3')}\n"
-    print "---------\n"
-    print "#{display('b1')} | #{display('b2')} | #{display('b3')}\n"
-    print "---------\n"
-    print "#{display('c1')} | #{display('c2')} | #{display('c3')}\n"
+    @positions.map do |row|
+      row.join(' | ')
+    end.join("\n------------\n")
   end
 end
 
-player1 = Game.new('Player 1', ['a1', 'b2', 'c3'])
-player1.display_grid
+class Player
+  attr_reader :board
+
+  def initialize(marker, choices, board)
+    @marker = marker
+    @choices = choices
+    @board = board
+  end
+end
+
+board = Board.new
+player1 = Player.new('X', ['a1', 'b2', 'c3'], board)
+puts board.display_grid
