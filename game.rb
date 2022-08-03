@@ -1,3 +1,7 @@
+# frozen_string_literal: false
+
+# Creates the tic-tac-toe board and displays positions
+# available and positions chosen by players
 class Board
   attr_reader :positions
 
@@ -12,6 +16,7 @@ class Board
   end
 end
 
+# Handles information about the two players of the game
 class Player
   attr_reader :board, :name, :choices
 
@@ -38,6 +43,7 @@ class Player
   end
 end
 
+# Starts game and allows players to choose their position on the board
 class RunGame
   @board = Board.new
   @player1 = Player.new('Player 1', 'X', @board)
