@@ -2,7 +2,7 @@ class Board
   attr_reader :positions
 
   def initialize
-    @positions = %w[a1 b1 c1 a2 b2 c2 a3 b2 c3]
+    @positions = %w[a1 b1 c1 a2 b2 c2 a3 b3 c3]
   end
 
   def display_grid
@@ -43,15 +43,16 @@ class RunGame
   @player1 = Player.new('Player 1', 'X', @board)
   @player2 = Player.new('Player 2', 'O', @board)
   @victory_combinations = [%w[a1 b1 c1],
-                            %w[a2 b2 c2],
-                            %w[a3 b3 c3],
-                            %w[a1 a2 a3],
-                            %w[b1 b2 b3],
-                            %w[c1 c2 c3],
-                            %w[a1 b2 c3],
-                            %w[a3 b2 c1]]
+                           %w[a2 b2 c2],
+                           %w[a3 b3 c3],
+                           %w[a1 a2 a3],
+                           %w[b1 b2 b3],
+                           %w[c1 c2 c3],
+                           %w[a1 b2 c3],
+                           %w[a3 b2 c1]]
   @game_over = false
   @active_player = @player1
+  @players_list = [@player1, @player2]
 
   puts "\nWelcome to Tic-Tac-Toe!\n\n"
   puts @board.display_grid
@@ -69,9 +70,15 @@ class RunGame
     puts "#{@active_player.name} wins!" if @game_over == true
   end
 
+  def self.switch_player
+    @active_player = @players_list.reject { |player| player == @active_player }.pop
+  end
+
   while @game_over == false
     play_turn
     victory?
+    switch_player
+    # To add: error handling and prevent switch_player if play_turn returns an error
   end
 end
 
