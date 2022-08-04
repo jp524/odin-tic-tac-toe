@@ -33,21 +33,21 @@ class Player
     end
   end
 
+  def valid_input?(input)
+    @board.positions.include?(input) ? true : false
+  end
+
   def new_move(position)
-    if @board.positions.include?(position)
-      @choices.push(position)
-      positions_on_board
-    else
-      p 'This cell is already taken or does not exist. Please choose another one.'
-    end
+    @choices.push(position)
+    positions_on_board
   end
 end
 
 # Starts game and allows players to choose their position on the board
 class RunGame
   @board = Board.new
-  @player1 = Player.new('Player 1', 'X', @board)
-  @player2 = Player.new('Player 2', 'O', @board)
+  @player1 = Player.new('Player 1', 'X ', @board)
+  @player2 = Player.new('Player 2', 'O ', @board)
   @victory_combinations = [%w[a1 b1 c1],
                            %w[a2 b2 c2],
                            %w[a3 b3 c3],
@@ -59,16 +59,24 @@ class RunGame
   @game_over = false
   @active_player = @player1
   @players_list = [@player1, @player2]
+  @valid_input = false
+  @input = ''
 
-  puts "\nWelcome to Tic-Tac-Toe!\n\n"
-  puts @board.display_grid
-  puts "\n"
+  def self.input_prompt
+    @input = ''
+    loop do
+      puts "#{@active_player.name}: Enter the name of a cell on the board. E.g. 'a1' or 'c2'."
+      @input = gets.chomp
+      @valid_input = @active_player.valid_input?(@input)
+      break if @valid_input == true
+
+      puts "Invalid input. Please try again.\n\n" if @valid_input == false
+    end
+  end
 
   def self.play_turn
-    puts "#{@active_player.name}: Enter the name of a cell on the board. E.g. 'a1' or 'c2'."
-    @active_player.new_move(gets.chomp)
-    puts @board.display_grid
-    puts "\n"
+    @active_player.new_move(@input)
+    puts "#{@board.display_grid}\n"
   end
 
   def self.victory?
@@ -80,11 +88,13 @@ class RunGame
     @active_player = @players_list.reject { |player| player == @active_player }.pop
   end
 
+  puts "\nWelcome to Tic-Tac-Toe!\n\n#{@board.display_grid}\n "
+
   while @game_over == false
+    input_prompt
     play_turn
     victory?
     switch_player
-    # To add: error handling and prevent switch_player if play_turn returns an error
   end
 end
 
